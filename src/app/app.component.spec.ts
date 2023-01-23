@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'jumia-web'`, () => {
+  it(`should have as title 'Jumia Web'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('jumia-web');
+    expect(app.title).toEqual('Jumia Web');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('jumia-web app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('Jumia Web');
   });
 });
