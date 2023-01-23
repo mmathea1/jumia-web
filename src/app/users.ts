@@ -1,15 +1,16 @@
 export interface User {
-    id: number;
+    email: string;
     name: string;
+
 }
 export const USERS: User[] = [
-    { id: 12, name: 'Dr. Nice' },
-    { id: 13, name: 'Bombasto' },
-    { id: 14, name: 'Celeritas' },
-    { id: 15, name: 'Magneta' },
-    { id: 16, name: 'RubberMan' },
-    { id: 17, name: 'Dynama' },
-    { id: 18, name: 'Dr. IQ' },
-    { id: 19, name: 'Magma' },
-    { id: 20, name: 'Tornado' }
+    { email: '12@gmail.com', name: 'Dr. Nice' },
+    { email: '13@gmail.com', name: 'Bombasto' },
+    { email: '14@gmail.com', name: 'Celeritas' },
+    { email: '15@gmail.com', name: 'Magneta' },
+    { email: '16@gmail.com', name: 'RubberMan' },
+    { email: '17@gmail.com', name: 'Dynama' },
+    { email: '18@gmail.com', name: 'Dr. IQ' },
+    { email: '19@gmail.com', name: 'Magma' },
+    { email: '20@gmail.com', name: 'Tornado' }
 ];
