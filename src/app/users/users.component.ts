@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { USERS, User } from '../users';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserService } from '../services/user.service';
+import { map } from 'rxjs/operators';
 
 const users: User[] = USERS;
 
@@ -10,18 +12,26 @@ const users: User[] = USERS;
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
+  dataSource = new MatTableDataSource<[]>();
+  displayedColumns: string[] = ['name', 'email', 'gender', 'location', 'age', 'registration', 'phone_number', 'actions'];
 
-  constructor() { }
-  dataSource = new MatTableDataSource<User>(users);
-  selectedUser?: User;
-  displayedColumns: string[] = ['name', 'email'];
-
-  onSelect(user: User): void {
-    this.selectedUser = user;
-  }
+  constructor(private usersService: UserService) { }
 
   ngOnInit(): void {
+    this.getUsers();
+  }
+
+  getUsers(): void {
+    this.usersService.getUsers()
+      .pipe((map(users => {
+        this.dataSource.data = users['results'];
+      })))
+      .subscribe();
 
   }
+
+
+
+
 
 }
