@@ -1,0 +1,32 @@
+ .user-header {
+     margin: 0 auto;
+     width: 50%;
+     padding: 10px;
+     text-align: center;
+ }
+
+ .user-table {
+     width: 90%;
+     margin: 0 auto;
+ }
+
+ .mat-header-cell {
+     font-weight: bold;
+     position: sticky;
+     background-color: black;
+     color: aliceblue;
+
+ }
+
+ .mat-sort-header-arrow {
+     color: white;
+ }
+
+ .mat-cell {
+     width: auto;
+     text-align: left;
+ }
+
+ .mat-column-name {
+     font-weight: bolder;
+ }
