@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { USERS, User } from '../users';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserService } from '../services/user.service';
 
 const users: User[] = USERS;
 
@@ -11,7 +12,9 @@ const users: User[] = USERS;
 })
 export class UsersComponent implements OnInit {
 
-  constructor() { }
+  constructor(private usersService: UserService) { }
+
+  users: User[] = [];
   dataSource = new MatTableDataSource<User>(users);
   selectedUser?: User;
   displayedColumns: string[] = ['name', 'email'];
@@ -20,8 +23,13 @@ export class UsersComponent implements OnInit {
     this.selectedUser = user;
   }
 
-  ngOnInit(): void {
-
+  getUsers(): void {
+    this.usersService.getUsers().subscribe(users => this.users = users);
   }
+  ngOnInit(): void {
+    this.getUsers();
+  }
+
+
 
 }
