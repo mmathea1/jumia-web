@@ -5,8 +5,7 @@ import { AppComponent } from './app.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: AppComponent },
+  { path: '', redirectTo: '/users', pathMatch: 'full' },
   { path: 'users', component: UsersComponent },
   { path: 'user/:id', component: UserDetailComponent },
 

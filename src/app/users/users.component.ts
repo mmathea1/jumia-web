@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { USERS, User } from '../users';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from '../services/user.service';
 import { map } from 'rxjs/operators';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
-const users: User[] = USERS;
+
 
 @Component({
   selector: 'app-users',
@@ -14,8 +15,16 @@ const users: User[] = USERS;
 export class UsersComponent implements OnInit {
   dataSource = new MatTableDataSource<[]>();
   displayedColumns: string[] = ['name', 'email', 'gender', 'location', 'age', 'registration', 'phone_number', 'actions'];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private usersService: UserService) { }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
+  }
 
   ngOnInit(): void {
     this.getUsers();
