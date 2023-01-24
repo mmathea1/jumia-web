@@ -11,24 +11,21 @@ const users: User[] = USERS;
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
+  users: User[] = [];
+  dataSource = new MatTableDataSource<User>(users);
+  displayedColumns: string[] = ['name', 'email'];
 
   constructor(private usersService: UserService) { }
 
-  users: User[] = [];
-  dataSource = new MatTableDataSource<User>(users);
-  selectedUser?: User;
-  displayedColumns: string[] = ['name', 'email'];
-
-  onSelect(user: User): void {
-    this.selectedUser = user;
+  ngOnInit(): void {
+    this.getUsers();
   }
 
   getUsers(): void {
     this.usersService.getUsers().subscribe(users => this.users = users);
   }
-  ngOnInit(): void {
-    this.getUsers();
-  }
+
+
 
 
 
