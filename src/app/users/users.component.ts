@@ -4,6 +4,7 @@ import { UserService } from '../services/user.service';
 import { map } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { ExportService } from '../services/export.service';
 
 
 
@@ -18,7 +19,7 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private usersService: UserService) { }
+  constructor(private usersService: UserService, private exportService: ExportService) { }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -39,7 +40,17 @@ export class UsersComponent implements OnInit {
 
   }
 
+  exportToCSV(): void {
+    var date = new Date().toLocaleString();
+    var fileName = 'users' + date;
+    this.exportService.exportToCSV(this.dataSource.data, fileName, this.displayedColumns);
+  }
 
+  exportToXML(): void {
+    var date = new Date().toLocaleString();
+    var fileName = 'users' + date;
+    this.exportService.exportToXML(this.dataSource.data, fileName, this.displayedColumns);
+  }
 
 
 
