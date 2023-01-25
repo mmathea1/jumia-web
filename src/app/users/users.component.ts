@@ -22,9 +22,8 @@ export class UsersComponent implements OnInit {
   dataSource = new MatTableDataSource<User[]>();
   displayedColumns: string[] = ['select', 'name', 'email', 'gender', 'location', 'age', 'registered', 'phone', 'view_user'];
   selection = new SelectionModel<any>(allowMultiSelect, []);
-  pageSize: number = 50;
-  pageSizeOptions: number[] = [50, 100, 250, 500];
-  pageLength: number = 50;
+  isLoading: boolean = false;
+  dataLength: number = 0;
 
 
 
@@ -34,7 +33,6 @@ export class UsersComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-
   }
 
   ngOnInit(): void {
@@ -42,6 +40,7 @@ export class UsersComponent implements OnInit {
   }
 
   getUsers(): void {
+    this.isLoading = true;
     this.usersService.getUsers()
       .pipe((map(users => {
         var res = users['results'];
@@ -61,6 +60,8 @@ export class UsersComponent implements OnInit {
         }
 
         this.dataSource.data = data;
+        this.dataLength = this.dataSource.data.length;
+        this.isLoading = false;
       })))
       .subscribe();
   }
