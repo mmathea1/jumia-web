@@ -40,17 +40,16 @@ export class UsersComponent implements OnInit {
 
   }
 
-  exportToCSV(): void {
+  exportFile(exportType: string): void {
     var date = new Date().toLocaleString();
     var fileName = 'users' + date;
-    this.exportService.exportToCSV(this.dataSource.data, fileName, this.displayedColumns);
+    if (exportType === 'xml') {
+      this.exportService.exportFile(this.dataSource.data, fileName, 'xml', this.displayedColumns);
+    } else {
+      this.exportService.exportFile(this.dataSource.data, fileName, 'csv', this.displayedColumns);
+    }
   }
 
-  exportToXML(): void {
-    var date = new Date().toLocaleString();
-    var fileName = 'users' + date;
-    this.exportService.exportToXML(this.dataSource.data, fileName, this.displayedColumns);
-  }
 
 
 

@@ -1,8 +1,8 @@
 <h2 class="user-header">Users</h2>
 <div class="container-fluid">
     <div>
-        <button type="button" (click)="exportToCSV()">Export to CSV</button>
-        <button type="button" (click)="exportToXML()">Export to XML</button>
+        <button type="button" (click)="exportFile('csv')">Export to CSV</button>
+        <button type="button" (click)="exportFile('xml')">Export to XML</button>
     </div>
     <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 user-table">
 

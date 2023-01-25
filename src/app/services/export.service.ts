@@ -19,7 +19,7 @@ export class ExportService {
     FileSaver.saveAs(data, fileName);
   }
 
-  public exportToCSV(rows: any[], fileName: string, columns?: string[]): string {
+  public exportFile(rows: any[], fileName: string, fileType: string, columns?: string[]): string {
     if (!rows || !rows.length) {
       return 'Error occured while exporting CSV file';
     }
@@ -32,7 +32,7 @@ export class ExportService {
         return true;
       }
     });
-    const csvContent = keys.join(separator) + '\n' + rows.map(row => {
+    const content = keys.join(separator) + '\n' + rows.map(row => {
       return keys.map(k => {
         let cell = row[k] === undefined || row[k] === null ? '' : row[k];
         cell = cell instanceof Date ? cell.toLocaleString() : cell.toString().replace(/"/g, '""');
@@ -42,34 +42,15 @@ export class ExportService {
         return cell;
       }).join(separator);
     }).join('\n');
-    this.saveAsFile(csvContent, `${fileName}${CSV_EXTENSION}`, CSV_TYPE);
-    return '';
-  }
 
-  public exportToXML(rows: any[], fileName: string, columns?: string[]): string {
-    if (!rows || !rows.length) {
-      return 'Error occured while exporting CSV file';
+    if (fileType === 'xml') {
+      this.saveAsFile(content, `${fileName}${XML_EXTENSION}`, XML_TYPE);
+    } else {
+      this.saveAsFile(content, `${fileName}${CSV_EXTENSION}`, CSV_TYPE);
     }
 
-    const separator = ',';
-    const keys = Object.keys(rows[0]).filter(k => {
-      if (columns?.length) {
-        return columns.includes(k);
-      } else {
-        return true;
-      }
-    });
-    const csvContent = keys.join(separator) + '\n' + rows.map(row => {
-      return keys.map(k => {
-        let cell = row[k] === undefined || row[k] === null ? '' : row[k];
-        cell = cell instanceof Date ? cell.toLocaleString() : cell.toString().replace(/"/g, '""');
-        if (cell.search(/("|,|\n)/g) >= 0) {
-          cell = `"${cell}"`;
-        }
-        return cell;
-      }).join(separator);
-    }).join('\n');
-    this.saveAsFile(csvContent, `${fileName}${XML_EXTENSION}`, XML_TYPE);
     return '';
   }
+
+
 }
