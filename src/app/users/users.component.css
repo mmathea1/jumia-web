@@ -5,27 +5,55 @@
      text-align: center;
  }
 
- .user-table {
+ table.user-table {
      width: 90%;
      margin: 0 auto;
+     border-collapse: collapse;
+     font-size: 0.9em;
+     font-family: sans-serif;
+     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
  }
 
- .mat-header-cell {
-     font-weight: bold;
+ .btn-container {
+     width: 100%;
+     margin: 0 auto;
+     padding: 15px;
+ }
+
+ .export-btn {
+     margin: 5px;
+     min-width: 100px;
+     height: 50px;
+
+ }
+
+ .user-table thead,
+ tr {
+     color: aliceblue;
+     text-align: left;
      position: sticky;
+ }
+
+ .user-table th {
+     padding: 12px 15px;
+
+ }
+
+ .user-table td.mat-cell {
+     padding: 15px;
+     align-items: center;
+ }
+
+ .user-table th {
+     font-weight: bold;
      background-color: black;
      color: aliceblue;
-
  }
 
- .mat-sort-header-arrow {
-     color: white;
+ .user-table tbody tr {
+     border-bottom: 1px solid #dddddd;
  }
 
- .mat-cell {
-     width: auto;
-     text-align: left;
- }
 
  .mat-column-name {
      font-weight: bolder;
