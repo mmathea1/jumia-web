@@ -9,7 +9,7 @@
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">Name</th>
             <td mat-cell *matCellDef="let user">
-                {{user.name.first}} {{user.name.last}}
+                {{user.name}}
             </td>
         </ng-container>
 
@@ -25,21 +25,21 @@
 
         <ng-container matColumnDef="location">
             <th mat-header-cell *matHeaderCellDef>Location</th>
-            <td mat-cell *matCellDef="let user">{{user.location.country}}</td>
+            <td mat-cell *matCellDef="let user">{{user.location}}</td>
         </ng-container>
 
         <ng-container matColumnDef="age">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by age">(DOB) Age</th>
-            <td mat-cell *matCellDef="let user">{{user.dob.age}}</td>
+            <td mat-cell *matCellDef="let user">{{user.age}}</td>
         </ng-container>
 
-        <ng-container matColumnDef="registration">
+        <ng-container matColumnDef="registered">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by age">Registeration Age
             </th>
-            <td mat-cell *matCellDef="let user">{{user.registered.age}}</td>
+            <td mat-cell *matCellDef="let user">{{user.registered}}</td>
         </ng-container>
 
-        <ng-container matColumnDef="phone_number">
+        <ng-container matColumnDef="phone">
             <th mat-header-cell *matHeaderCellDef>Phone Number</th>
             <td mat-cell *matCellDef="let user">{{user.phone}}</td>
         </ng-container>
