@@ -8,6 +8,7 @@ import { ExportService } from '../services/export.service';
 import { User, UserFilter } from '../interfaces';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSelectChange } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const allowMultiSelect = true;
 
@@ -31,7 +32,10 @@ export class UsersComponent implements OnInit {
   filterDictionary = new Map<string, string>();
   selectionAmount: number = 0;
 
-  constructor(private usersService: UserService, private exportService: ExportService) { }
+  constructor(
+    private usersService: UserService,
+    private exportService: ExportService,
+    private _snackBar: MatSnackBar) { }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -52,6 +56,12 @@ export class UsersComponent implements OnInit {
       }
       return isMatch;
     }
+  }
+
+  openSnackBar(message: string, action: string): void {
+    this._snackBar.open(message, action, {
+      duration: 1000
+    });
   }
 
   getUsers(): void {
@@ -78,6 +88,7 @@ export class UsersComponent implements OnInit {
         this.dataSource.data = data;
         this.selectionAmount = this.dataLength = this.dataSource.data.length;
         this.isLoading = false;
+        this.openSnackBar(this.dataLength + ' users found', 'close');
       })))
       .subscribe();
   }
@@ -91,6 +102,7 @@ export class UsersComponent implements OnInit {
     } else {
       this.exportService.exportFile(data, fileName, 'csv', this.displayedColumns);
     }
+    this.openSnackBar(exportType + ' export complete', 'close');
   }
 
   isAllSelected(): boolean {
@@ -115,6 +127,7 @@ export class UsersComponent implements OnInit {
     this.filterDictionary.set(userfilter.name, ob.value);
     var jsonString = JSON.stringify(Array.from(this.filterDictionary.entries()));
     this.dataSource.filter = jsonString;
+    this.openSnackBar(this.dataSource.filteredData.length + ' users found', 'close');
 
   }
 
