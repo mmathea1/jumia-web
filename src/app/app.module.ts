@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSelectModule,
     MatSnackBarModule,
     MatBadgeModule,
-    MatMenuModule
+    MatMenuModule,
+    MatIconModule
 
   ],
   providers: [],

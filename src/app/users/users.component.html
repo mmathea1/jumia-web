@@ -1,20 +1,26 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12">
-            <h1 class="user-header">Users</h1>
+        <div class="col-8 user-header">
+            <h1 class="heading float-left">Users</h1>
         </div>
-    </div>
-    <div class="row btn-container">
-        <div class="col-sm">
-            <button class="btn btn-primary dropdown-toggle" mat-button [matMenuTriggerFor]="menu"
+        <div class="col-4">
+            <button class="btn btn-outline-primary  header-btn dropdown-toggle" mat-button [matMenuTriggerFor]="menu"
                 matBadge="{{selectionAmount}}" matBadgePosition="after" matBadgeColor="accent" id="dropdownMenuButton"
-                aria-expanded="false">Export Users</button>
+                aria-expanded="false">
+                <mat-icon class="header-icon float-left">cloud_download</mat-icon><span class="float-right">Export
+                    Users</span>
+            </button>
             <mat-menu #menu="matMenu" aria-labelledby="dropdownMenuButton">
                 <button mat-menu-item (click)="exportFile('csv')"> as CSV</button>
                 <button mat-menu-item (click)="exportFile('xml')"> as XML</button>
             </mat-menu>
+            <button class="btn btn-primary header-btn" mat-button>
+                <mat-icon class="header-icon float-left">add_circle_outline</mat-icon> <span class="float-right">New
+                    Table</span>
+            </button>
         </div>
     </div>
+
     <div class="table-responsive">
         <div class="spinner-container" *ngIf="isLoading">
             <mat-progress-spinner color="accent" mode="indeterminate" diameter="50">
