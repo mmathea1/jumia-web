@@ -12,8 +12,6 @@ const XML_TYPE = 'application/xml';
 export class ExportService {
 
 
-  constructor() { }
-
   private saveAsFile(buffer: any, fileName: string, fileType: string): void {
     const data: Blob = new Blob([buffer], { type: fileType });
     FileSaver.saveAs(data, fileName);

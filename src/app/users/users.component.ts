@@ -24,13 +24,13 @@ export class UsersComponent implements OnInit {
   dataSource = new MatTableDataSource<User[]>();
   displayedColumns: string[] = ['select', 'name', 'email', 'gender', 'nat', 'age', 'registered', 'phone', 'view_user'];
   selection = new SelectionModel<any>(allowMultiSelect, []);
-  isLoading: boolean = false;
-  dataLength: number = 0;
+  isLoading = false;
+  dataLength = 0;
   genders: string[] = ['All', 'male', 'female'];
   nationalities: string[] = ['All', 'AU', 'BR', 'CA', 'CH', 'DE', 'DK', 'ES', 'FI', 'FR', 'GB', 'IE', 'IN', 'IR', 'MX', 'NL', 'NO', 'NZ', 'RS', 'TR', 'UA', 'US'];
   userFilters: UserFilter[] = [];
   filterDictionary = new Map<string, string>();
-  selectionAmount: number = 0;
+  selectionAmount = 0;
 
   constructor(
     private usersService: UserService,
@@ -47,10 +47,10 @@ export class UsersComponent implements OnInit {
     this.userFilters.push({ name: 'gender', options: this.genders, defaultValue: 'All' });
     this.userFilters.push({ name: 'nat', options: this.nationalities, defaultValue: 'All' });
     this.dataSource.filterPredicate = function (record, filter) {
-      var map = new Map(JSON.parse(filter));
+      const map = new Map(JSON.parse(filter));
       let isMatch = false;
-      for (let [key, value] of map) {
-        var k: any = key as keyof User;
+      for (const [key, value] of map) {
+        const k: any = key as keyof User;
         isMatch = (value == "All") || (record[k] == value);
         if (!isMatch) return false;
       }
@@ -68,11 +68,11 @@ export class UsersComponent implements OnInit {
     this.isLoading = true;
     this.usersService.getUsers()
       .pipe((map(users => {
-        var res = users['results'];
+        const res = users['results'];
         // TODO: push User objects
-        var data: any = [];
-        for (var i = 0; i < res.length; i++) {
-          var user: User = {
+        const data: any = [];
+        for (let i = 0; i < res.length; i++) {
+          const user: User = {
             id: res[i]['id'].value,
             name: res[i]['name'].first + ' ' + res[i]['name'].last,
             email: res[i]['email'],
@@ -94,9 +94,9 @@ export class UsersComponent implements OnInit {
   }
 
   exportFile(exportType: string): void {
-    var date = new Date().toJSON().slice(0, 10).toString();
-    var fileName = 'users_' + date;
-    var data = this.selection.selected.length > 0 ? this.selection.selected : this.dataSource.data;
+    const date = new Date().toJSON().slice(0, 10).toString();
+    const fileName = 'users_' + date;
+    const data = this.selection.selected.length > 0 ? this.selection.selected : this.dataSource.data;
     if (exportType === 'xml') {
       this.exportService.exportFile(data, fileName, 'xml', this.displayedColumns);
     } else {
@@ -132,7 +132,7 @@ export class UsersComponent implements OnInit {
 
   applyUserFilter(ob: MatSelectChange, userfilter: UserFilter) {
     this.filterDictionary.set(userfilter.name, ob.value);
-    var jsonString = JSON.stringify(Array.from(this.filterDictionary.entries()));
+    const jsonString = JSON.stringify(Array.from(this.filterDictionary.entries()));
     this.dataSource.filter = jsonString;
     this.openSnackBar(this.dataSource.filteredData.length + ' users found', 'close');
 
