@@ -56,10 +56,6 @@ table.user-table {
 }
 
 
-.user-table tr:hover {
-    background-color: rgba(9, 95, 215, 0.1);
-}
-
 .spinner-container {
     display: flex;
     justify-content: center;
@@ -79,6 +75,10 @@ tr {
     vertical-align: middle;
 }
 
+.user-table tr:hover {
+    background-color: rgba(9, 95, 215, 0.1);
+    font-weight: 700;
+}
 
 .user-table td.mat-cell {
     align-items: center;
