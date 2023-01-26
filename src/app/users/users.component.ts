@@ -43,16 +43,12 @@ export class UsersComponent implements OnInit {
     this.userFilters.push({ name: 'nat', options: this.nationalities, defaultValue: 'All' });
     this.dataSource.filterPredicate = function (record, filter) {
       var map = new Map(JSON.parse(filter));
-      console.log(map);
       let isMatch = false;
-
-      //TODO: fix type error
-      // for (let [key, value] of map) {
-      //   console.log(key as keyof User);
-      //   isMatch = (value == "All") || (record[key as keyof User] == value);
-      //   if (!isMatch) return false;
-      // }
-
+      for (let [key, value] of map) {
+        var k: any = key as keyof User;
+        isMatch = (value == "All") || (record[k] == value);
+        if (!isMatch) return false;
+      }
       return isMatch;
     }
   }
