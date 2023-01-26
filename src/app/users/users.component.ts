@@ -5,8 +5,9 @@ import { map } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ExportService } from '../services/export.service';
-import { User } from '../users';
+import { User, UserFilter } from '../interfaces';
 import { SelectionModel } from '@angular/cdk/collections';
+import { MatSelectChange } from '@angular/material/select';
 
 const allowMultiSelect = true;
 
@@ -20,13 +21,14 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource = new MatTableDataSource<User[]>();
-  displayedColumns: string[] = ['select', 'name', 'email', 'gender', 'location', 'age', 'registered', 'phone', 'view_user'];
+  displayedColumns: string[] = ['select', 'name', 'email', 'gender', 'nat', 'age', 'registered', 'phone', 'view_user'];
   selection = new SelectionModel<any>(allowMultiSelect, []);
   isLoading: boolean = false;
   dataLength: number = 0;
-
-
-
+  genders: string[] = ['All', 'male', 'female'];
+  nationalities: string[] = ['All', 'AU', 'BR', 'CA', 'CH', 'DE', 'DK', 'ES', 'FI', 'FR', 'GB', 'IE', 'IN', 'IR', 'MX', 'NL', 'NO', 'NZ', 'RS', 'TR', 'UA', 'US'];
+  userFilters: UserFilter[] = [];
+  filterDictionary = new Map<string, string>();
 
   constructor(private usersService: UserService, private exportService: ExportService) { }
 
@@ -37,6 +39,22 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
+    this.userFilters.push({ name: 'gender', options: this.genders, defaultValue: 'All' });
+    this.userFilters.push({ name: 'nat', options: this.nationalities, defaultValue: 'All' });
+    this.dataSource.filterPredicate = function (record, filter) {
+      var map = new Map(JSON.parse(filter));
+      console.log(map);
+      let isMatch = false;
+
+      //TODO: fix type error
+      // for (let [key, value] of map) {
+      //   console.log(key as keyof User);
+      //   isMatch = (value == "All") || (record[key as keyof User] == value);
+      //   if (!isMatch) return false;
+      // }
+
+      return isMatch;
+    }
   }
 
   getUsers(): void {
@@ -44,6 +62,7 @@ export class UsersComponent implements OnInit {
     this.usersService.getUsers()
       .pipe((map(users => {
         var res = users['results'];
+        // TODO: push User objects
         var data: any = [];
         for (var i = 0; i < res.length; i++) {
           var user: User = {
@@ -51,7 +70,7 @@ export class UsersComponent implements OnInit {
             name: res[i]['name'].first + ' ' + res[i]['name'].last,
             email: res[i]['email'],
             gender: res[i]['gender'],
-            location: res[i]['location'].country,
+            nat: res[i]['nat'],
             age: res[i]['dob'].age,
             registered: res[i]['registered'].age,
             phone: res[i]['phone']
@@ -88,8 +107,12 @@ export class UsersComponent implements OnInit {
   }
 
 
+  applyUserFilter(ob: MatSelectChange, userfilter: UserFilter) {
+    this.filterDictionary.set(userfilter.name, ob.value);
+    var jsonString = JSON.stringify(Array.from(this.filterDictionary.entries()));
+    this.dataSource.filter = jsonString;
 
-
+  }
 
 
 }

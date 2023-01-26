@@ -3,8 +3,14 @@ export interface User {
     email: string;
     name: string;
     gender: string;
-    location: string;
     age: number;
     registered: number;
     phone: string;
+    nat: string;
+}
+
+export interface UserFilter {
+    name: string;
+    options: string[];
+    defaultValue: string;
 }
