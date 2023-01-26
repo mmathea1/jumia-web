@@ -6,10 +6,12 @@
     </div>
     <div class="row btn-container">
         <div class="col-sm">
-            <button type="button" (click)="exportFile('csv')" class="btn btn-primary export-btn csv-button">Export to
-                CSV</button>
-            <button type="button" (click)="exportFile('xml')" class="btn btn-primary export-btn xml-button">Export to
-                XML</button>
+            <button type="button" mat-raised-button color="primary" matBadge="{{selectionAmount}}"
+                matBadgePosition="before" matBadgeColor="accent" (click)="exportFile('csv')"
+                class="btn btn-primary export-btn csv-button">Export to CSV</button>
+            <button type="button" mat-raised-button color="primary" matBadge="{{selectionAmount}}"
+                matBadgePosition="before" matBadgeColor="accent" (click)="exportFile('xml')"
+                class="btn btn-primary export-btn xml-button">Export to XML</button>
         </div>
         <div class="col-sm">
 
@@ -22,7 +24,7 @@
         </div>
         <div *ngIf="dataLength; else noUsers">
             <mat-form-field appearance="fill" *ngFor="let userfilter of userFilters">
-                <mat-label>{{userfilter.name}}</mat-label>
+                <mat-label>{{userfilter.name | titlecase}}</mat-label>
                 <mat-select [(value)]="userfilter.defaultValue" (selectionChange)="applyUserFilter($event,userfilter)">
                     <mat-option *ngFor="let op of userfilter.options" [value]="op">
                         {{op}}

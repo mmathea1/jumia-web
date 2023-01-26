@@ -8,6 +8,7 @@ import { ExportService } from '../services/export.service';
 import { User, UserFilter } from '../interfaces';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSelectChange } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const allowMultiSelect = true;
 
@@ -23,14 +24,18 @@ export class UsersComponent implements OnInit {
   dataSource = new MatTableDataSource<User[]>();
   displayedColumns: string[] = ['select', 'name', 'email', 'gender', 'nat', 'age', 'registered', 'phone', 'view_user'];
   selection = new SelectionModel<any>(allowMultiSelect, []);
-  isLoading: boolean = false;
-  dataLength: number = 0;
+  isLoading = false;
+  dataLength = 0;
   genders: string[] = ['All', 'male', 'female'];
   nationalities: string[] = ['All', 'AU', 'BR', 'CA', 'CH', 'DE', 'DK', 'ES', 'FI', 'FR', 'GB', 'IE', 'IN', 'IR', 'MX', 'NL', 'NO', 'NZ', 'RS', 'TR', 'UA', 'US'];
   userFilters: UserFilter[] = [];
   filterDictionary = new Map<string, string>();
+  selectionAmount = 0;
 
-  constructor(private usersService: UserService, private exportService: ExportService) { }
+  constructor(
+    private usersService: UserService,
+    private exportService: ExportService,
+    private _snackBar: MatSnackBar) { }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -42,30 +47,32 @@ export class UsersComponent implements OnInit {
     this.userFilters.push({ name: 'gender', options: this.genders, defaultValue: 'All' });
     this.userFilters.push({ name: 'nat', options: this.nationalities, defaultValue: 'All' });
     this.dataSource.filterPredicate = function (record, filter) {
-      var map = new Map(JSON.parse(filter));
-      console.log(map);
+      const map = new Map(JSON.parse(filter));
       let isMatch = false;
-
-      //TODO: fix type error
-      // for (let [key, value] of map) {
-      //   console.log(key as keyof User);
-      //   isMatch = (value == "All") || (record[key as keyof User] == value);
-      //   if (!isMatch) return false;
-      // }
-
+      for (const [key, value] of map) {
+        const k: any = key as keyof User;
+        isMatch = (value == "All") || (record[k] == value);
+        if (!isMatch) return false;
+      }
       return isMatch;
     }
+  }
+
+  openSnackBar(message: string, action: string): void {
+    this._snackBar.open(message, action, {
+      duration: 1000
+    });
   }
 
   getUsers(): void {
     this.isLoading = true;
     this.usersService.getUsers()
       .pipe((map(users => {
-        var res = users['results'];
+        const res = users['results'];
         // TODO: push User objects
-        var data: any = [];
-        for (var i = 0; i < res.length; i++) {
-          var user: User = {
+        const data: any = [];
+        for (let i = 0; i < res.length; i++) {
+          const user: User = {
             id: res[i]['id'].value,
             name: res[i]['name'].first + ' ' + res[i]['name'].last,
             email: res[i]['email'],
@@ -79,38 +86,55 @@ export class UsersComponent implements OnInit {
         }
 
         this.dataSource.data = data;
-        this.dataLength = this.dataSource.data.length;
+        this.selectionAmount = this.dataLength = this.dataSource.data.length;
         this.isLoading = false;
+        this.openSnackBar(this.dataLength + ' users found', 'close');
       })))
       .subscribe();
   }
 
   exportFile(exportType: string): void {
-    var date = new Date().toJSON().slice(0, 10).toString();
-    var fileName = 'users_' + date;
-    var data = this.selection.selected.length > 0 ? this.selection.selected : this.dataSource.data;
+    const date = new Date().toJSON().slice(0, 10).toString();
+    const fileName = 'users_' + date;
+    const data = this.selection.selected.length > 0 ? this.selection.selected : this.dataSource.data;
     if (exportType === 'xml') {
       this.exportService.exportFile(data, fileName, 'xml', this.displayedColumns);
     } else {
       this.exportService.exportFile(data, fileName, 'csv', this.displayedColumns);
     }
+    this.openSnackBar(exportType + ' export complete', 'close');
   }
 
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.dataSource.paginator!.pageSize
     return numSelected === numRows;
   }
 
+  selectRows(): void {
+    for (let i = 0; i < this.dataSource.paginator!.pageSize; i++) {
+      this.selection.select(this.dataSource.data[i]);
+      this.selectionAmount = this.selection.selected.length;
+    }
+  }
+
   toggleAllRows(): void {
-    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row))
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      this.selectionAmount = this.dataLength;
+    } else {
+      this.selectRows();
+      this.selectionAmount = this.selection.selected.length;
+
+    }
   }
 
 
   applyUserFilter(ob: MatSelectChange, userfilter: UserFilter) {
     this.filterDictionary.set(userfilter.name, ob.value);
-    var jsonString = JSON.stringify(Array.from(this.filterDictionary.entries()));
+    const jsonString = JSON.stringify(Array.from(this.filterDictionary.entries()));
     this.dataSource.filter = jsonString;
+    this.openSnackBar(this.dataSource.filteredData.length + ' users found', 'close');
 
   }
 

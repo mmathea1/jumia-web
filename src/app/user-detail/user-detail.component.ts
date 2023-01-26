@@ -20,8 +20,9 @@ export class UserDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    throw new Error('Method not implemented.');
   }
+
 
   goBack(): void {
     this.location.back();
