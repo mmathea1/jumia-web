@@ -119,7 +119,14 @@ export class UsersComponent implements OnInit {
   }
 
   toggleAllRows(): void {
-    this.isAllSelected() ? this.selection.clear() : this.selectRows();
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      this.selectionAmount = this.dataLength;
+    } else {
+      this.selectRows();
+      this.selectionAmount = this.selection.selected.length;
+
+    }
   }
 
 

@@ -6,12 +6,12 @@
     </div>
     <div class="row btn-container">
         <div class="col-sm">
-            <button type="button" (click)="exportFile('csv')" class="btn btn-primary export-btn csv-button">Export
-                {{selectionAmount}} to
-                CSV</button>
-            <button type="button" (click)="exportFile('xml')" class="btn btn-primary export-btn xml-button">Export
-                {{selectionAmount}} to
-                XML</button>
+            <button type="button" mat-raised-button color="primary" matBadge="{{selectionAmount}}"
+                matBadgePosition="before" matBadgeColor="accent" (click)="exportFile('csv')"
+                class="btn btn-primary export-btn csv-button">Export to CSV</button>
+            <button type="button" mat-raised-button color="primary" matBadge="{{selectionAmount}}"
+                matBadgePosition="before" matBadgeColor="accent" (click)="exportFile('xml')"
+                class="btn btn-primary export-btn xml-button">Export to XML</button>
         </div>
         <div class="col-sm">
 
