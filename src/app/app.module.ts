@@ -19,6 +19,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -44,10 +46,13 @@ import { MatIconModule } from '@angular/material/icon';
     MatSnackBarModule,
     MatBadgeModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule
 
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { floatLabel: 'always' } },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

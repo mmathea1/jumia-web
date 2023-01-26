@@ -1,7 +1,6 @@
 .heading {
     font-weight: 700;
     letter-spacing: 0.022em;
-
 }
 
 .header-btn {
@@ -15,10 +14,34 @@
     font-size: 12px;
 }
 
-.header-icon {
+.icon {
     vertical-align: middle;
     margin: 5px;
-    font-size: 22px;
+    font-size: 20px;
+}
+
+.mat-form-field,
+.mat-form-field-label,
+.mat-label,
+.mat-option {
+    font-family: Roboto Slab, "Helvetica Neue", serif;
+}
+
+.mat-form-field-label,
+.mat-label {
+    font-weight: 400;
+    margin: 15px;
+}
+
+
+.mat-form-field {
+    margin: 10px;
+
+
+}
+
+.mat-option {
+    font-size: 12px;
 }
 
 /* .user-header {
