@@ -1,6 +1,7 @@
-.heading {
-    font-weight: 700;
-    letter-spacing: 0.022em;
+.mat-card-header {
+    vertical-align: bottom;
+    padding: 14px;
+    font-size: 24px;
 }
 
 .header-btn {
@@ -44,75 +45,68 @@
     font-size: 12px;
 }
 
-/* .user-header {
-     margin: 0 auto;
-     width: 50%;
-     padding: 10px;
-     text-align: center;
- }
-
- table.user-table {
-     width: 90%;
-     margin: 0 auto;
-     border-collapse: collapse;
-     font-size: 0.9em;
-     font-family: sans-serif;
-     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-     position: relative;
- }
-
- .spinner-container {
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     background: rgba(255, 255, 255, 0.6);
-     position: absolute;
-     width: 100%;
-     height: 100%;
-     z-index: 1;
- }
-
- .btn-container {
-     width: 100%;
-     margin: 0 auto;
-     padding: 15px;
- }
-
- .export-btn {
-     margin: 5px;
-     min-width: 100px;
-     height: 50px;
-
- }
-
- .user-table thead,
- tr {
-     color: aliceblue;
-     text-align: left;
-     position: sticky;
- }
-
- .user-table th {
-     padding: 12px 15px;
-
- }
-
- .user-table td.mat-cell {
-     padding: 15px;
-     align-items: center;
- }
-
- .user-table th {
-     font-weight: bold;
-     background-color: black;
-     color: aliceblue;
- }
-
- .user-table tbody tr {
-     border-bottom: 1px solid #dddddd;
- }
+table.user-table {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
 
 
- .mat-column-name {
-     font-weight: bolder;
- } */
+.user-table tr:hover {
+    background-color: rgba(9, 95, 215, 0.1);
+}
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(9, 95, 215, 0.1);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+
+.user-table thead,
+tr {
+    text-align: left;
+    position: sticky;
+    vertical-align: middle;
+}
+
+
+.user-table td.mat-cell {
+    align-items: center;
+    color: rgba(105, 115, 151);
+    font-family: Roboto Slab, "Helvetica Neue", serif;
+
+}
+
+.user-table th {
+    font-weight: 900;
+    background-color: rgba(9, 95, 215, 0.1);
+    color: rgba(105, 115, 151);
+}
+
+.user-table tbody tr {
+    border-bottom: 1px solid rgba(116, 148, 160, 0.1);
+
+}
+
+.mat-column-name {
+    font-weight: 700;
+}
+
+.mat-checkbox {
+    color: rgba(105, 115, 151);
+    font-family: Roboto Slab, "Helvetica Neue", serif;
+}
+
+.mat-checkbox:checked {
+    color: rgba(105, 115, 151);
+}
