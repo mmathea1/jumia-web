@@ -6,15 +6,13 @@
     </div>
     <div class="row btn-container">
         <div class="col-sm">
-            <button type="button" mat-raised-button color="primary" matBadge="{{selectionAmount}}"
-                matBadgePosition="before" matBadgeColor="accent" (click)="exportFile('csv')"
-                class="btn btn-primary export-btn csv-button">Export to CSV</button>
-            <button type="button" mat-raised-button color="primary" matBadge="{{selectionAmount}}"
-                matBadgePosition="before" matBadgeColor="accent" (click)="exportFile('xml')"
-                class="btn btn-primary export-btn xml-button">Export to XML</button>
-        </div>
-        <div class="col-sm">
-
+            <button class="btn btn-primary dropdown-toggle" mat-button [matMenuTriggerFor]="menu"
+                matBadge="{{selectionAmount}}" matBadgePosition="after" matBadgeColor="accent" id="dropdownMenuButton"
+                aria-expanded="false">Export Users</button>
+            <mat-menu #menu="matMenu" aria-labelledby="dropdownMenuButton">
+                <button mat-menu-item (click)="exportFile('csv')"> as CSV</button>
+                <button mat-menu-item (click)="exportFile('xml')"> as XML</button>
+            </mat-menu>
         </div>
     </div>
     <div class="table-responsive">
