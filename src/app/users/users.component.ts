@@ -29,6 +29,7 @@ export class UsersComponent implements OnInit {
   nationalities: string[] = ['All', 'AU', 'BR', 'CA', 'CH', 'DE', 'DK', 'ES', 'FI', 'FR', 'GB', 'IE', 'IN', 'IR', 'MX', 'NL', 'NO', 'NZ', 'RS', 'TR', 'UA', 'US'];
   userFilters: UserFilter[] = [];
   filterDictionary = new Map<string, string>();
+  selectionAmount: number = 0;
 
   constructor(private usersService: UserService, private exportService: ExportService) { }
 
@@ -75,7 +76,7 @@ export class UsersComponent implements OnInit {
         }
 
         this.dataSource.data = data;
-        this.dataLength = this.dataSource.data.length;
+        this.selectionAmount = this.dataLength = this.dataSource.data.length;
         this.isLoading = false;
       })))
       .subscribe();
@@ -94,12 +95,19 @@ export class UsersComponent implements OnInit {
 
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.dataSource.paginator!.pageSize
     return numSelected === numRows;
   }
 
+  selectRows(): void {
+    for (let i = 0; i < this.dataSource.paginator!.pageSize; i++) {
+      this.selection.select(this.dataSource.data[i]);
+      this.selectionAmount = this.selection.selected.length;
+    }
+  }
+
   toggleAllRows(): void {
-    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row))
+    this.isAllSelected() ? this.selection.clear() : this.selectRows();
   }
 
 
