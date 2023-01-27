@@ -10,12 +10,19 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.scss$/,
-                loaders: ['raw-loader', 'sass-loader'],
+                test: /\.css$/,
+                use: ['raw-loader', 'sass-loader', 'style-loader', 'css-loader'],
                 exclude: /node_modules/,
             },
             { test: /\.ts$/, use: 'ts-loader' },
 
         ],
+    },
+    devServer: {
+        static: {
+            directory: path.join(__dirname, 'public'),
+        },
+        compress: true,
+        port: 9000,
     },
 };

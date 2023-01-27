@@ -31,19 +31,17 @@ export class UsersComponent implements OnInit {
   userFilters: UserFilter[] = [];
   filterDictionary = new Map<string, string>();
   selectionAmount = 0;
+  showTable = false;
 
   constructor(
     private usersService: UserService,
     private exportService: ExportService,
     private _snackBar: MatSnackBar) { }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
 
   ngOnInit(): void {
     this.getUsers();
+    this.selectionAmount = this.dataLength;
     this.userFilters.push({ name: 'gender', options: this.genders, defaultValue: 'All' });
     this.userFilters.push({ name: 'nationality', options: this.nationalities, defaultValue: 'All' });
     this.dataSource.filterPredicate = function (record, filter) {
@@ -56,6 +54,12 @@ export class UsersComponent implements OnInit {
       }
       return isMatch;
     }
+
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   openSnackBar(message: string, action: string): void {
@@ -86,8 +90,9 @@ export class UsersComponent implements OnInit {
         }
 
         this.dataSource.data = data;
-        this.selectionAmount = this.dataLength = this.dataSource.data.length;
+        this.dataLength = this.dataSource.data.length;
         this.isLoading = false;
+        this.dataLength > 0 ? this.showTable = true : this.showTable = false;
         this.openSnackBar(this.dataLength + ' users found', 'close');
       })))
       .subscribe();

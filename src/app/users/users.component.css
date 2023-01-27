@@ -1,18 +1,26 @@
-.mat-card-header {
-    vertical-align: bottom;
-    padding: 14px;
+.heading {
     font-size: 24px;
+    font-weight: 500;
+    padding: 20px;
+    margin: 25px auto;
 }
 
 .header-btn {
     width: fit-content;
     height: 40px;
-    margin: 5px;
-    vertical-align: baseline;
+    margin-right: 10px;
     padding: 4px 8px;
-    float: right;
     font-weight: 500;
     font-size: 12px;
+}
+
+.mat-checkbox-input,
+.mat-checkbox-inner-container {
+    background-color: red;
+}
+
+.mat-form-field-outline {
+    border-color: brown;
 }
 
 .icon {
@@ -24,35 +32,34 @@
 .mat-form-field,
 .mat-form-field-label,
 .mat-label,
-.mat-option {
+.mat-option,
+.mat-select-value {
     font-family: Roboto Slab, "Helvetica Neue", serif;
-}
-
-.mat-form-field-label,
-.mat-label {
-    font-weight: 400;
-    margin: 15px;
-}
-
-
-.mat-form-field {
-    margin: 10px;
-
-
-}
-
-.mat-option {
     font-size: 12px;
+    color: rgba(105, 115, 151);
+}
+
+#filters-container {
+    width: 100%;
+    margin: 25px auto;
+    align-items: baseline;
+}
+
+#filters-container .col {
+    margin-right: 20px;
+    vertical-align: middle;
+
 }
 
 table.user-table {
     width: 100%;
-    margin: 0 auto;
+    margin: 25px auto;
     border-collapse: collapse;
     font-size: 0.9em;
-    font-family: sans-serif;
+    font-family: Roboto Slab, "Helvetica Neue", serif;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     position: relative;
+    table-layout: inherit;
 }
 
 
@@ -75,7 +82,8 @@ tr {
     vertical-align: middle;
 }
 
-.user-table tr:hover {
+.user-table tr:hover,
+.mat-option:hover {
     background-color: rgba(9, 95, 215, 0.1);
     font-weight: 700;
 }
@@ -93,10 +101,7 @@ tr {
     color: rgba(105, 115, 151);
 }
 
-.user-table tbody tr {
-    border-bottom: 1px solid rgba(116, 148, 160, 0.1);
 
-}
 
 .mat-column-name {
     font-weight: 700;
