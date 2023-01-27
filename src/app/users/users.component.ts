@@ -90,7 +90,7 @@ export class UsersComponent implements OnInit {
         }
 
         this.dataSource.data = data;
-        this.dataLength = this.dataSource.data.length;
+        this.selectionAmount = this.dataLength = this.dataSource.data.length;
         this.isLoading = false;
         this.dataLength > 0 ? this.showTable = true : this.showTable = false;
         this.openSnackBar(this.dataLength + ' users found', 'close');

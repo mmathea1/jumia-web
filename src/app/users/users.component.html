@@ -7,7 +7,7 @@
         </div>
     </ng-container>
 
-    <ng-container class="mat-card">
+    <ng-container class="mat-card" *ngIf="!isLoading || showTable">
         <div class="row d-flex flex-row" id="filters-container">
             <div class="col">
                 <mat-form-field class="header-btn" appearance="outline">
@@ -42,7 +42,7 @@
 
             </div>
             <div class="col">
-                <button class="btn btn-outline-primary header-btn" mat-button>
+                <button class="btn btn-outline-primary header-btn" mat-button id="newTableButton">
                     <mat-icon class="icon">add_circle_outline</mat-icon> <span class="float-right">New
                         Table</span>
                 </button>
@@ -50,12 +50,11 @@
         </div>
     </ng-container>
 
-    <ng-container class="spinner-container" *ngIf="isLoading && !showTable">
-        <mat-progress-spinner mode="indeterminate" diameter="50">
-        </mat-progress-spinner>
-    </ng-container>
-
     <div class="mat-elevation-z8">
+        <div class="spinner-container" *ngIf="isLoading">
+            <mat-progress-spinner mode="indeterminate" diameter="50">
+            </mat-progress-spinner>
+        </div>
         <table mat-table matSort [dataSource]="dataSource" class="table-hover user-table">
             <tbody>
                 <ng-container matColumnDef="select">
@@ -121,6 +120,11 @@
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                        No data found.
+                    </td>
+                </tr>
             </tbody>
         </table>
         <mat-paginator #paginator [pageSizeOptions]=" [20, 50, 100, 250, 500]" showFirstLastButtons
@@ -129,11 +133,3 @@
     </div>
 
 </div>
-
-<ng-template #noUsers>
-    <ng-container class="mat-card">
-        <h1 class="mat-card-header">
-            No users found
-        </h1>
-    </ng-container>
-</ng-template>
