@@ -117,7 +117,7 @@ export class UsersComponent implements OnInit {
 
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.paginator!.pageSize
+    const numRows = this.dataSource.paginator!.pageSize;
     return numSelected === numRows;
   }
 
@@ -139,13 +139,20 @@ export class UsersComponent implements OnInit {
     }
   }
 
-
   applyUserFilter(ob: MatSelectChange, userfilter: UserFilter) {
     this.filterDictionary.set(userfilter.name, ob.value);
     const jsonString = JSON.stringify(Array.from(this.filterDictionary.entries()));
     this.dataSource.filter = jsonString;
     this.openSnackBar(this.dataSource.filteredData.length + ' users found', 'close');
+    this.selection.clear();
+  }
 
+  onChangedPageSize($event: any): void {
+    if (this.selection.selected.length > 0) {
+      this.selection.clear();
+      this.toggleAllRows();
+      this.selectionAmount = this.selection.selected.length;
+    }
   }
 
 

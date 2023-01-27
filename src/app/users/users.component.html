@@ -42,7 +42,7 @@
 
             </div>
             <div class="col">
-                <button class="btn btn-outline-primary header-btn" mat-button id="newTableButton">
+                <button class="btn btn-outline-primary header-btn" mat-button id="newTableButton" (click)="getUsers()">
                     <mat-icon class="icon">add_circle_outline</mat-icon> <span class="float-right">New
                         Table</span>
                 </button>
@@ -127,8 +127,8 @@
                 </tr>
             </tbody>
         </table>
-        <mat-paginator #paginator [pageSizeOptions]=" [20, 50, 100, 250, 500]" showFirstLastButtons
-            aria-label="Select page of users">
+        <mat-paginator #paginator [pageSizeOptions]="[10, 50, 100, 200, 500]" showFirstLastButtons
+            [pageIndex]="pageIndex" (page)="onChangedPageSize($event)" aria-label="Select page of users">
         </mat-paginator>
     </div>
 
