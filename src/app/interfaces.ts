@@ -6,7 +6,7 @@ export interface User {
     age: number;
     registered: number;
     phone: string;
-    nat: string;
+    nationality: string;
 }
 
 export interface UserFilter {

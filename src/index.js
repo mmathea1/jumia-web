@@ -1,11 +1,12 @@
-const http = require("http");
-//create a server object: 
-http
-    .createServer(function (req, res) {
-        res.write("<h1>Hello World!</h1>");
-        //write a response to the client 
+import _ from 'lodash';
+function component() {
+    const element = document.createElement('div');
 
-        res.end();
-        //end the response 
-    })
-    .listen(8080);
+    // Lodash, currently included via a script, is required for this line to work
+    // Lodash, now imported by this script
+    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
+
+    return element;
+}
+
+document.body.appendChild(component());

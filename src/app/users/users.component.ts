@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource = new MatTableDataSource<User[]>();
-  displayedColumns: string[] = ['select', 'name', 'email', 'gender', 'nat', 'age', 'registered', 'phone', 'view_user'];
+  displayedColumns: string[] = ['select', 'name', 'email', 'gender', 'nationality', 'age', 'registered', 'phone', 'view_user'];
   selection = new SelectionModel<any>(allowMultiSelect, []);
   isLoading = false;
   dataLength = 0;
@@ -31,21 +31,19 @@ export class UsersComponent implements OnInit {
   userFilters: UserFilter[] = [];
   filterDictionary = new Map<string, string>();
   selectionAmount = 0;
+  showTable = false;
 
   constructor(
     private usersService: UserService,
     private exportService: ExportService,
     private _snackBar: MatSnackBar) { }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
 
   ngOnInit(): void {
     this.getUsers();
+    this.selectionAmount = this.dataLength;
     this.userFilters.push({ name: 'gender', options: this.genders, defaultValue: 'All' });
-    this.userFilters.push({ name: 'nat', options: this.nationalities, defaultValue: 'All' });
+    this.userFilters.push({ name: 'nationality', options: this.nationalities, defaultValue: 'All' });
     this.dataSource.filterPredicate = function (record, filter) {
       const map = new Map(JSON.parse(filter));
       let isMatch = false;
@@ -56,6 +54,12 @@ export class UsersComponent implements OnInit {
       }
       return isMatch;
     }
+
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   openSnackBar(message: string, action: string): void {
@@ -77,7 +81,7 @@ export class UsersComponent implements OnInit {
             name: res[i]['name'].first + ' ' + res[i]['name'].last,
             email: res[i]['email'],
             gender: res[i]['gender'],
-            nat: res[i]['nat'],
+            nationality: res[i]['nat'],
             age: res[i]['dob'].age,
             registered: res[i]['registered'].age,
             phone: res[i]['phone']
@@ -88,6 +92,7 @@ export class UsersComponent implements OnInit {
         this.dataSource.data = data;
         this.selectionAmount = this.dataLength = this.dataSource.data.length;
         this.isLoading = false;
+        this.dataLength > 0 ? this.showTable = true : this.showTable = false;
         this.openSnackBar(this.dataLength + ' users found', 'close');
       })))
       .subscribe();
@@ -103,6 +108,11 @@ export class UsersComponent implements OnInit {
       this.exportService.exportFile(data, fileName, 'csv', this.displayedColumns);
     }
     this.openSnackBar(exportType + ' export complete', 'close');
+  }
+
+  searchFilter(event: Event): void {
+    const filterText = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterText.trim().toLowerCase();
   }
 
   isAllSelected(): boolean {

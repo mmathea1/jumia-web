@@ -1,117 +1,135 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="user-header">Users</h1>
+    <ng-container class="mat-card">
+        <div class="row">
+            <div class="col-12">
+                <mat-card-title class="heading"> Users</mat-card-title>
+            </div>
         </div>
-    </div>
-    <div class="row btn-container">
-        <div class="col-sm">
-            <button type="button" mat-raised-button color="primary" matBadge="{{selectionAmount}}"
-                matBadgePosition="before" matBadgeColor="accent" (click)="exportFile('csv')"
-                class="btn btn-primary export-btn csv-button">Export to CSV</button>
-            <button type="button" mat-raised-button color="primary" matBadge="{{selectionAmount}}"
-                matBadgePosition="before" matBadgeColor="accent" (click)="exportFile('xml')"
-                class="btn btn-primary export-btn xml-button">Export to XML</button>
-        </div>
-        <div class="col-sm">
+    </ng-container>
 
+    <ng-container class="mat-card" *ngIf="!isLoading || showTable">
+        <div class="row d-flex flex-row" id="filters-container">
+            <div class="col">
+                <mat-form-field class="header-btn" appearance="outline">
+                    <mat-label>Search by name</mat-label>
+                    <mat-icon class="icon" matPrefix>search</mat-icon>
+                    <input matInput (keyup)="searchFilter($event)" placeholder="Start typing..." #input />
+                </mat-form-field>
+            </div>
+            <div class="col"></div>
+            <div class="col  d-inline-flex d-flex flex-row ">
+                <mat-form-field class="header-btn" appearance="outline" *ngFor="let userfilter of userFilters">
+                    <mat-label>{{userfilter.name | titlecase}}</mat-label>
+                    <mat-select [(value)]="userfilter.defaultValue"
+                        (selectionChange)="applyUserFilter($event,userfilter)">
+                        <mat-option *ngFor="let op of userfilter.options" [value]="op">
+                            {{op}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary header-btn dropdown-toggle" [matMenuTriggerFor]="menu" mat-button
+                    matBadge="{{selectionAmount}}" matBadgeColor="accent" matBadgeSize="medium" matBadgePosition="after"
+                    id="dropdownMenuButton" aria-expanded="false">
+                    <mat-icon class="icon">cloud_download</mat-icon><span>Export
+                        Users</span>
+                </button>
+                <mat-menu #menu="matMenu" aria-labelledby="dropdownMenuButton">
+                    <button mat-menu-item (click)="exportFile('csv')"> as CSV</button>
+                    <button mat-menu-item (click)="exportFile('xml')"> as XML</button>
+                </mat-menu>
+
+            </div>
+            <div class="col">
+                <button class="btn btn-outline-primary header-btn" mat-button id="newTableButton">
+                    <mat-icon class="icon">add_circle_outline</mat-icon> <span class="float-right">New
+                        Table</span>
+                </button>
+            </div>
         </div>
-    </div>
-    <div class="table-responsive">
+    </ng-container>
+
+    <div class="mat-elevation-z8">
         <div class="spinner-container" *ngIf="isLoading">
-            <mat-progress-spinner color="accent" mode="indeterminate" diameter="50">
+            <mat-progress-spinner mode="indeterminate" diameter="50">
             </mat-progress-spinner>
         </div>
-        <div *ngIf="dataLength; else noUsers">
-            <mat-form-field appearance="fill" *ngFor="let userfilter of userFilters">
-                <mat-label>{{userfilter.name | titlecase}}</mat-label>
-                <mat-select [(value)]="userfilter.defaultValue" (selectionChange)="applyUserFilter($event,userfilter)">
-                    <mat-option *ngFor="let op of userfilter.options" [value]="op">
-                        {{op}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <table mat-table matSort [dataSource]="dataSource"
-                class="table table-striped table-hover mat-elevation-z8 user-table">
-                <tbody>
-                    <ng-container matColumnDef="select">
-                        <th mat-header-cell *matHeaderCellDef>
-                            <mat-checkbox (change)="$event ? toggleAllRows(): null"
-                                [checked]="selection.hasValue() && isAllSelected()"
-                                [indeterminate]="selection.hasValue() && !isAllSelected()">
-                            </mat-checkbox>
-                        </th>
-                        <td mat-cell *matCellDef="let user">
-                            <mat-checkbox (click)="$event.stopPropagation()"
-                                (change)="$event ? selection.toggle(user) : null"
-                                [checked]="selection.isSelected(user)">
-                            </mat-checkbox>
-                        </td>
+        <table mat-table matSort [dataSource]="dataSource" class="table-hover user-table">
+            <tbody>
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? toggleAllRows(): null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let user">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(user) : null" [checked]="selection.isSelected(user)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">Name
+                    </th>
+                    <td mat-cell *matCellDef="let user">
+                        {{user.name}}
+                    </td>
+                </ng-container>
 
-                    </ng-container>
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">Name
-                        </th>
-                        <td mat-cell *matCellDef="let user">
-                            {{user.name}}
-                        </td>
-                    </ng-container>
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef>Email</th>
+                    <td mat-cell *matCellDef="let user">{{user.email}}</td>
+                </ng-container>
 
-                    <ng-container matColumnDef="email">
-                        <th mat-header-cell *matHeaderCellDef>Email</th>
-                        <td mat-cell *matCellDef="let user">{{user.email}}</td>
-                    </ng-container>
+                <ng-container matColumnDef="gender">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by gender">
+                        Gender
+                    </th>
+                    <td mat-cell *matCellDef="let user">{{user.gender | titlecase}}</td>
+                </ng-container>
 
-                    <ng-container matColumnDef="gender">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by gender">
-                            Gender
-                        </th>
-                        <td mat-cell *matCellDef="let user">{{user.gender | titlecase}}</td>
-                    </ng-container>
+                <ng-container matColumnDef="nationality">
+                    <th mat-header-cell *matHeaderCellDef>Nationality</th>
+                    <td mat-cell *matCellDef="let user">{{user.nat}}</td>
+                </ng-container>
 
-                    <ng-container matColumnDef="nat">
-                        <th mat-header-cell *matHeaderCellDef>Nationality</th>
-                        <td mat-cell *matCellDef="let user">{{user.nat}}</td>
-                    </ng-container>
+                <ng-container matColumnDef="age">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by age">Age
+                    </th>
+                    <td mat-cell *matCellDef="let user">{{user.age}}</td>
+                </ng-container>
 
-                    <ng-container matColumnDef="age">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by age">Age
-                        </th>
-                        <td mat-cell *matCellDef="let user">{{user.age}}</td>
-                    </ng-container>
+                <ng-container matColumnDef="registered">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by age">
+                        Registered
+                    </th>
+                    <td mat-cell *matCellDef="let user">{{user.registered}}</td>
+                </ng-container>
 
-                    <ng-container matColumnDef="registered">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by age">
-                            Registered
-                        </th>
-                        <td mat-cell *matCellDef="let user">{{user.registered}}</td>
-                    </ng-container>
+                <ng-container matColumnDef="phone">
+                    <th mat-header-cell *matHeaderCellDef>Phone Number</th>
+                    <td mat-cell *matCellDef="let user">{{user.phone}}</td>
+                </ng-container>
 
-                    <ng-container matColumnDef="phone">
-                        <th mat-header-cell *matHeaderCellDef>Phone Number</th>
-                        <td mat-cell *matCellDef="let user">{{user.phone}}</td>
-                    </ng-container>
+                <ng-container matColumnDef="view_user">
+                    <th mat-header-cell *matHeaderCellDef>View User</th>
+                    <td mat-cell *matCellDef="let user"><mat-icon>visibility</mat-icon></td>
+                </ng-container>
 
-                    <ng-container matColumnDef="view_user">
-                        <th mat-header-cell *matHeaderCellDef>View User</th>
-                        <td mat-cell *matCellDef="let user"><i class=""></i></td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </tbody>
-            </table>
-        </div>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                        No data found.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <mat-paginator #paginator [pageSizeOptions]=" [20, 50, 100, 250, 500]" showFirstLastButtons
+            aria-label="Select page of users">
+        </mat-paginator>
     </div>
-    <mat-paginator [pageSizeOptions]=" [50, 100, 250, 500]" showFirstLastButtons
-        aria-label="Select page of users"></mat-paginator>
-
-
 
 </div>
-
-<ng-template #noUsers>
-    <h1 class="user-header">
-        No users found
-    </h1>
-</ng-template>
