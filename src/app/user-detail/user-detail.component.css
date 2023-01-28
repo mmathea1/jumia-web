@@ -1,0 +1,79 @@
+body {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.card-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.mat-list {
+    display: table;
+}
+
+.mat-list-item {
+    display: inline-block;
+    color: rgba(105, 115, 151);
+    font-family: Roboto Slab, "Helvetica Neue", serif;
+    height: 100%;
+}
+
+.mat-list-item:hover {
+    background-color: rgba(9, 95, 215, 0.1);
+    font-weight: 700;
+}
+
+.mat-list-item-title {
+    display: table-cell;
+    width: 50%;
+    font-weight: 700;
+    margin-right: 15px;
+    float: left;
+
+}
+
+.mat-list-item-line {
+    display: table-cell;
+    width: 40%;
+    margin-left: 15px;
+    float: right;
+}
+
+
+.picture {
+    display: flex;
+}
+
+#profile-pic {
+    margin-left: 20px;
+}
+
+.outlineButton {
+    border: 1px solid rgba(105, 115, 151) !important;
+    color: rgba(105, 115, 151);
+    float: left;
+}
+
+.outlineButton:hover {
+    background-color: rgba(105, 115, 151);
+    color: white;
+    border: 1px solid rgba(105, 115, 151) !important;
+}
+
+.primaryButton {
+    background-color: rgba(105, 115, 151);
+    color: white;
+    border: 1px solid rgba(105, 115, 151) !important;
+    float: right;
+}
+
+.primaryButton:hover {
+    border: 1px solid rgba(105, 115, 151) !important;
+    color: rgba(105, 115, 151);
+    background-color: white;
+}
+
+.primaryButton .a:hover {
+    color: rgba(105, 115, 151);
+}

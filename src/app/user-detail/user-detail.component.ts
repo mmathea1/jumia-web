@@ -11,7 +11,8 @@ import { Location } from '@angular/common';
   styleUrls: ['./user-detail.component.css']
 })
 export class UserDetailComponent implements OnInit {
-  @Input() user?: User;
+  // @Input() user?: User;
+  user: any = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -20,7 +21,20 @@ export class UserDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    const userString = localStorage.getItem('user');
+    this.user = userString !== null ? JSON.parse(userString) : {
+      "id": "954860987",
+      "name": "Juliette Gagnon",
+      "email": "juliette.gagnon@example.com",
+      "gender": "female",
+      "nationality": "CA",
+      "age": 74,
+      "registered": 10,
+      "phone": "P65 Q35-7824"
+    };
+
+
+    console.log(this.user);
   }
 
 

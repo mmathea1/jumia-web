@@ -1,8 +1,74 @@
-<div *ngIf="user">
-    <h3>{{user.name | uppercase}} Details</h3>
-    <div>
-        <label for="user-name">User name: </label>
-        <input id="user-name" placeholder="name" [(ngModel)]="user.name">
-    </div>
-    <button type="button" (click)="goBack()">go back</button>
+<div class="container-fluid">
+    <ng-container class="row">
+        <div class="col-12">
+            <h1 class="heading">{{user.name}} Details</h1>
+        </div>
+    </ng-container>
+
+    <ng-container class="col-12 card-container">
+        <mat-card>
+            <div class="row">
+                <div class="col-4 picture">
+                    <img id="profile-pic" mat-card-image class="rounded"
+                        src="https://material.angular.io/assets/img/examples/shiba2.jpg"
+                        alt="{{user.name}} profile picture">
+                </div>
+
+                <div class="col-8 user-details">
+                    <mat-list>
+                        <mat-list-item>
+                            <span matListItemTitle class="mat-list-item-title ">ID</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.id}}</span>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <span matListItemTitle class="mat-list-item-title ">Email</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.email}}</span>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <span matListItemTitle class="mat-list-item-title ">Gender</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.gender}}</span>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <span matListItemTitle class="mat-list-item-title ">Age</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.age}}</span>
+
+                        </mat-list-item>
+                        <mat-list-item>
+                            <span matListItemTitle class="mat-list-item-title ">Nationality</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.nationality}}</span>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <span matListItemTitle class="mat-list-item-title ">Phone Number</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.phone}}</span>
+                        </mat-list-item>
+
+                        <mat-list-item>
+                            <span matListItemTitle class="mat-list-item-title ">Registered</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.registered}}</span>
+                        </mat-list-item>
+
+                    </mat-list>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+            <mat-card-actions>
+                <div class="row">
+                    <div class="col">
+                        <button mat-button (click)="goBack()" class="btn btn-outline-primary outlineButton header-btn">
+                            <mat-icon class="icon">arrow_back</mat-icon><span>Go Back</span>
+                        </button>
+                    </div>
+                    <div class="col">
+                        <a href="mailto:{{user.email}}">
+                            <button mat-button class="btn btn-outline-primary header-btn primaryButton">
+                                <mat-icon class="icon">mail</mat-icon> Email {{user.name}}
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </mat-card-actions>
+        </mat-card>
+    </ng-container>
+
+
 </div>

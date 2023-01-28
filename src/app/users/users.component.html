@@ -2,7 +2,7 @@
     <ng-container class="mat-card">
         <div class="row">
             <div class="col-12">
-                <mat-card-title class="heading"> Users</mat-card-title>
+                <h1 class="heading">Users</h1>
             </div>
         </div>
     </ng-container>
@@ -29,9 +29,9 @@
                 </mat-form-field>
             </div>
             <div class="col">
-                <button class="btn btn-primary header-btn dropdown-toggle" [matMenuTriggerFor]="menu" mat-button
-                    matBadge="{{selectionAmount}}" matBadgeColor="accent" matBadgeSize="medium" matBadgePosition="after"
-                    id="dropdownMenuButton" aria-expanded="false">
+                <button class="btn btn-primary header-btn dropdown-toggle primaryButton" [matMenuTriggerFor]="menu"
+                    mat-button matBadge="{{selectionAmount}}" matBadgeColor="accent" matBadgeSize="medium"
+                    matBadgePosition="after" id="dropdownMenuButton" aria-expanded="false">
                     <mat-icon class="icon">cloud_download</mat-icon><span>Export
                         Users</span>
                 </button>
@@ -42,8 +42,8 @@
 
             </div>
             <div class="col">
-                <button class="btn btn-outline-primary header-btn" mat-button id="newTableButton">
-                    <mat-icon class="icon">add_circle_outline</mat-icon> <span class="float-right">New
+                <button class="btn btn-outline-primary header-btn outlineButton" mat-button (click)="getUsers()">
+                    <mat-icon class="icon">loop</mat-icon> <span class="float-right">New
                         Table</span>
                 </button>
             </div>
@@ -114,8 +114,17 @@
                 </ng-container>
 
                 <ng-container matColumnDef="view_user">
-                    <th mat-header-cell *matHeaderCellDef>View User</th>
-                    <td mat-cell *matCellDef="let user"><mat-icon>visibility</mat-icon></td>
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+
+                    <td mat-cell *matCellDef="let user;">
+                        <button mat-mini-fab (click)="viewUser(user)">
+                            <mat-icon class="action-icon">visibility</mat-icon>
+                        </button>
+
+                        <button mat-mini-fab>
+                            <a href="mailto:{{user.email}}"><mat-icon class="action-icon">mail</mat-icon></a>
+                        </button>
+                    </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -127,8 +136,8 @@
                 </tr>
             </tbody>
         </table>
-        <mat-paginator #paginator [pageSizeOptions]=" [20, 50, 100, 250, 500]" showFirstLastButtons
-            aria-label="Select page of users">
+        <mat-paginator #paginator [pageSizeOptions]="[10, 50, 100, 200, 500]" showFirstLastButtons
+            (page)="onChangedPageSize($event)" aria-label="Select page of users">
         </mat-paginator>
     </div>
 
