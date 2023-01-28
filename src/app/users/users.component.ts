@@ -102,11 +102,7 @@ export class UsersComponent implements OnInit {
     const date = new Date().toJSON().slice(0, 10).toString();
     const fileName = 'users_' + date;
     const data = this.selection.selected.length > 0 ? this.selection.selected : this.dataSource.data;
-    if (exportType === 'xml') {
-      this.exportService.exportFile(data, fileName, 'xml', this.displayedColumns);
-    } else {
-      this.exportService.exportFile(data, fileName, 'csv', this.displayedColumns);
-    }
+    this.exportService.exportFile(data, fileName, exportType, this.displayedColumns);
     this.openSnackBar(exportType + ' export complete', 'close');
   }
 
@@ -138,6 +134,7 @@ export class UsersComponent implements OnInit {
   searchFilter(event: Event): void {
     const filterText = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterText.trim().toLowerCase();
+    this.openSnackBar(this.dataSource.filteredData.length + ' users found', 'close');
   }
 
 
@@ -145,6 +142,7 @@ export class UsersComponent implements OnInit {
     this.filterDictionary.set(userfilter.name, ob.value);
     const jsonString = JSON.stringify(Array.from(this.filterDictionary.entries()));
     this.dataSourceFilters.filter = jsonString;
+    this.dataSource.data = this.dataSourceFilters.filteredData;
     this.openSnackBar(this.dataSourceFilters.filteredData.length + ' users found', 'close');
     this.selection.clear();
   }
