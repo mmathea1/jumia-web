@@ -43,6 +43,10 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
+    this.dataLength = this.dataSource.data.length;
+    console.log('data length: ', this.dataLength, this.dataSource.data);
+    this.dataLength > 0 ? this.showTable = true : this.showTable = false;
+    this.selectionAmount = this.dataLength;
     this.userFilters.push({ name: 'gender', options: this.genders, defaultValue: 'All' });
     this.userFilters.push({ name: 'nationality', options: this.nationalities, defaultValue: 'All' });
     this.dataSourceFilters.filterPredicate = function (record, filter) {
