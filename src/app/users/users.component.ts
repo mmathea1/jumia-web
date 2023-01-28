@@ -9,6 +9,7 @@ import { User, UserFilter } from '../interfaces';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSelectChange } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 const allowMultiSelect = true;
 
@@ -38,7 +39,7 @@ export class UsersComponent implements OnInit {
   constructor(
     private usersService: UserService,
     private exportService: ExportService,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar, private router: Router) { }
 
 
   ngOnInit(): void {
@@ -158,6 +159,11 @@ export class UsersComponent implements OnInit {
       this.selectionAmount = this.selection.selected.length;
     }
   }
-
+  viewUser(user: User): void {
+    // go to user detail page and fetch user details
+    console.log(user);
+    localStorage.setItem('user', JSON.stringify(user));
+    this.router.navigate(['/user/' + user.id]);
+  }
 
 }
