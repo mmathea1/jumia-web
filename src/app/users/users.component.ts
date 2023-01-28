@@ -19,16 +19,18 @@ const allowMultiSelect = true;
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource = new MatTableDataSource<User[]>();
+  dataSourceFilters = new MatTableDataSource<User[]>();
+  userFilters: UserFilter[] = [];
   displayedColumns: string[] = ['select', 'name', 'email', 'gender', 'nationality', 'age', 'registered', 'phone', 'view_user'];
   selection = new SelectionModel<any>(allowMultiSelect, []);
   isLoading = false;
   dataLength = 0;
   genders: string[] = ['All', 'male', 'female'];
   nationalities: string[] = ['All', 'AU', 'BR', 'CA', 'CH', 'DE', 'DK', 'ES', 'FI', 'FR', 'GB', 'IE', 'IN', 'IR', 'MX', 'NL', 'NO', 'NZ', 'RS', 'TR', 'UA', 'US'];
-  userFilters: UserFilter[] = [];
   filterDictionary = new Map<string, string>();
   selectionAmount = 0;
   showTable = false;
@@ -41,10 +43,9 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
-    this.selectionAmount = this.dataLength;
     this.userFilters.push({ name: 'gender', options: this.genders, defaultValue: 'All' });
     this.userFilters.push({ name: 'nationality', options: this.nationalities, defaultValue: 'All' });
-    this.dataSource.filterPredicate = function (record, filter) {
+    this.dataSourceFilters.filterPredicate = function (record, filter) {
       const map = new Map(JSON.parse(filter));
       let isMatch = false;
       for (const [key, value] of map) {
@@ -88,9 +89,8 @@ export class UsersComponent implements OnInit {
           };
           data.push(user);
         }
-
-        this.dataSource.data = data;
-        this.selectionAmount = this.dataLength = this.dataSource.data.length;
+        this.dataSourceFilters.data = this.dataSource.data = data;
+        // TODO: check for status 200
         this.isLoading = false;
         this.dataLength > 0 ? this.showTable = true : this.showTable = false;
         this.openSnackBar(this.dataLength + ' users found', 'close');
@@ -110,10 +110,6 @@ export class UsersComponent implements OnInit {
     this.openSnackBar(exportType + ' export complete', 'close');
   }
 
-  searchFilter(event: Event): void {
-    const filterText = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterText.trim().toLowerCase();
-  }
 
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
@@ -139,11 +135,17 @@ export class UsersComponent implements OnInit {
     }
   }
 
+  searchFilter(event: Event): void {
+    const filterText = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterText.trim().toLowerCase();
+  }
+
+
   applyUserFilter(ob: MatSelectChange, userfilter: UserFilter) {
     this.filterDictionary.set(userfilter.name, ob.value);
     const jsonString = JSON.stringify(Array.from(this.filterDictionary.entries()));
-    this.dataSource.filter = jsonString;
-    this.openSnackBar(this.dataSource.filteredData.length + ' users found', 'close');
+    this.dataSourceFilters.filter = jsonString;
+    this.openSnackBar(this.dataSourceFilters.filteredData.length + ' users found', 'close');
     this.selection.clear();
   }
 
