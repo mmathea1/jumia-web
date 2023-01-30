@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <ng-container class="row">
         <div class="col-12">
-            <h1 class="heading">{{user.name}} Details</h1>
+            <h1 class="heading">{{user.name.title}} {{user.name.first}} {{user.name.last}} Details</h1>
         </div>
     </ng-container>
 
@@ -9,43 +9,60 @@
         <mat-card>
             <div class="row">
                 <div class="col-4 picture">
-                    <img id="profile-pic" mat-card-image class="rounded"
-                        src="https://material.angular.io/assets/img/examples/shiba2.jpg"
-                        alt="{{user.name}} profile picture">
+                    <img id="profile-pic" mat-card-image class="rounded" src="{{user.picture.large}}"
+                        alt="{{user.name.first}} profile picture">
                 </div>
 
                 <div class="col-8 user-details">
                     <mat-list>
                         <mat-list-item>
                             <span matListItemTitle class="mat-list-item-title ">ID</span>
-                            <span matListItemLine class="mat-list-item-line">{{user.id}}</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.id.value}}</span>
                         </mat-list-item>
+                        <hr>
                         <mat-list-item>
                             <span matListItemTitle class="mat-list-item-title ">Email</span>
                             <span matListItemLine class="mat-list-item-line">{{user.email}}</span>
                         </mat-list-item>
+                        <hr>
                         <mat-list-item>
                             <span matListItemTitle class="mat-list-item-title ">Gender</span>
                             <span matListItemLine class="mat-list-item-line">{{user.gender}}</span>
                         </mat-list-item>
+                        <hr>
                         <mat-list-item>
                             <span matListItemTitle class="mat-list-item-title ">Age</span>
-                            <span matListItemLine class="mat-list-item-line">{{user.age}}</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.dob.date | date}} <br> <span>
+                                    {{user.dob.age}}
+                                    Years
+                                </span></span>
 
                         </mat-list-item>
+                        <hr>
                         <mat-list-item>
                             <span matListItemTitle class="mat-list-item-title ">Nationality</span>
-                            <span matListItemLine class="mat-list-item-line">{{user.nationality}}</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.location.country}}</span>
                         </mat-list-item>
+                        <hr>
+                        <mat-list-item>
+                            <span matListItemTitle class="mat-list-item-title ">City</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.location.city}}</span>
+                        </mat-list-item>
+                        <hr>
                         <mat-list-item>
                             <span matListItemTitle class="mat-list-item-title ">Phone Number</span>
                             <span matListItemLine class="mat-list-item-line">{{user.phone}}</span>
                         </mat-list-item>
+                        <hr>
 
                         <mat-list-item>
                             <span matListItemTitle class="mat-list-item-title ">Registered</span>
-                            <span matListItemLine class="mat-list-item-line">{{user.registered}}</span>
+                            <span matListItemLine class="mat-list-item-line">{{user.registered.date | date}}
+                                <br>
+                                <span>{{user.registered.age}} Years</span>
+                            </span>
                         </mat-list-item>
+                        <hr>
 
                     </mat-list>
                 </div>
@@ -61,7 +78,7 @@
                     <div class="col">
                         <a href="mailto:{{user.email}}">
                             <button mat-button class="btn btn-outline-primary header-btn primaryButton">
-                                <mat-icon class="icon">mail</mat-icon> Email {{user.name}}
+                                <mat-icon class="icon">mail</mat-icon> Email {{user.name.title}} {{user.name.last}}
                             </button>
                         </a>
                     </div>
@@ -72,3 +89,13 @@
 
 
 </div>
+
+<ng-template *ngIf="noUser">
+    <ng-container>
+        <div class="row">
+            <div class="col-12">
+                <h1 class="heading">No User Found</h1>
+            </div>
+        </div>
+    </ng-container>
+</ng-template>
