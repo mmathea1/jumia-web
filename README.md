@@ -24,6 +24,7 @@ docker run -dp 3000:3000 jumia-web
 - unit tests
 - responsiveness
 - formatting output in utf-8 format
+- Issues https://github.com/mmathea1/jumia-web/issues 
 
 ## Support
 contact: mmathea984@gmail.com
