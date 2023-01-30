@@ -1,9 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { User } from '../interfaces';
-import { UserService } from '../services/user.service';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-
 
 @Component({
   selector: 'app-user-detail',
@@ -11,34 +7,21 @@ import { Location } from '@angular/common';
   styleUrls: ['./user-detail.component.css']
 })
 export class UserDetailComponent implements OnInit {
-  // @Input() user?: User;
   user: any = {};
+  noUser = false;
 
   constructor(
-    private route: ActivatedRoute,
     private location: Location,
-    private userService: UserService
   ) { }
 
   ngOnInit(): void {
     const userString = localStorage.getItem('user');
-    this.user = userString !== null ? JSON.parse(userString) : {
-      "id": "954860987",
-      "name": "Juliette Gagnon",
-      "email": "juliette.gagnon@example.com",
-      "gender": "female",
-      "nationality": "CA",
-      "age": 74,
-      "registered": 10,
-      "phone": "P65 Q35-7824"
-    };
-
-
-    console.log(this.user);
+    this.user = userString !== null ? JSON.parse(userString) : {};
+    this.user == null || this.user == 'undefined' || JSON.stringify(this.user) === '{}' ? this.noUser = false : this.noUser = true;
   }
 
-
   goBack(): void {
+    localStorage.clear();
     this.location.back();
   }
 }

@@ -1,12 +1,48 @@
 export interface User {
-    id: number;
+    id: {
+        name: string,
+        value: string
+    };
     email: string;
-    name: string;
+    name: {
+        title: string,
+        first: string,
+        last: string
+    };
+    location: {
+        street: {
+            number: string,
+            name: string
+        },
+        city: string,
+        state: string,
+        country: string,
+        postcode: string,
+        coordinates: {
+            latitude: string,
+            longitude: string
+        },
+        timezone: {
+            offset: string,
+            description: string
+        }
+    };
+    picture: {
+        large: string,
+        medium: string,
+        thumbnail: string
+    };
     gender: string;
-    age: number;
-    registered: number;
+    dob: {
+        date: string,
+        age: number
+    };
+    registered: {
+        date: string,
+        age: number
+    };
     phone: string;
-    nationality: string;
+    nat: string;
 }
 
 export interface UserFilter {
