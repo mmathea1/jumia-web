@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as FileSaver from 'file-saver';
 
+
 const CSV_EXTENSION = '.csv';
 const XML_EXTENSION = '.xml';
 const CSV_TYPE = 'text/csv';
@@ -19,7 +20,7 @@ export class ExportService {
 
   public exportFile(rows: any[], fileName: string, fileType: string, columns?: string[]): string {
     if (!rows || !rows.length) {
-      return 'Error occured while exporting CSV file';
+      return 'Error occured while exporting file';
     }
 
     const separator = ',';
@@ -47,7 +48,7 @@ export class ExportService {
       this.saveAsFile(content, `${fileName}${CSV_EXTENSION}`, CSV_TYPE);
     }
 
-    return '';
+    return fileType + ' export complete';
   }
 
 

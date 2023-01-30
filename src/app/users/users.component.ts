@@ -11,7 +11,6 @@ import { MatSelectChange } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
-const allowMultiSelect = true;
 
 
 @Component({
@@ -23,18 +22,20 @@ export class UsersComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  dataSource = new MatTableDataSource<User[]>();
-  dataSourceFilters = new MatTableDataSource<User[]>();
-  userFilters: UserFilter[] = [];
-  displayedColumns: string[] = ['select', 'name', 'email', 'gender', 'nationality', 'age', 'registered', 'phone', 'view_user'];
-  selection = new SelectionModel<any>(allowMultiSelect, []);
-  isLoading = false;
-  dataLength = 0;
-  genders: string[] = ['All', 'male', 'female'];
-  nationalities: string[] = ['All', 'AU', 'BR', 'CA', 'CH', 'DE', 'DK', 'ES', 'FI', 'FR', 'GB', 'IE', 'IN', 'IR', 'MX', 'NL', 'NO', 'NZ', 'RS', 'TR', 'UA', 'US'];
-  filterDictionary = new Map<string, string>();
+
   selectionAmount = 0;
   showTable = false;
+  isLoading = false;
+  dataLength = 0;
+  dataSource = new MatTableDataSource<User>();
+  dataSourceFilters = new MatTableDataSource<User>();
+  selection = new SelectionModel<User>(true, []);
+  userFilters: UserFilter[] = [];
+  filterDictionary = new Map<string, string>();
+  displayedColumns = ['select', 'name', 'email', 'gender', 'nationality', 'age', 'registered', 'phone', 'view_user'];
+  exportColumns = ['first_name', 'last_name', 'dob', 'email', 'location', 'gender', 'phone', 'nat', 'registered'];
+  genders: string[] = ['All', 'male', 'female'];
+  nationalities: string[] = ['All', 'AU', 'BR', 'CA', 'CH', 'DE', 'DK', 'ES', 'FI', 'FR', 'GB', 'IE', 'IN', 'IR', 'MX', 'NL', 'NO', 'NZ', 'RS', 'TR', 'UA', 'US'];
 
   constructor(
     private usersService: UserService,
@@ -44,17 +45,13 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
-    this.dataLength = this.dataSource.data.length;
-    console.log('data length: ', this.dataLength, this.dataSource.data);
-    this.dataLength > 0 ? this.showTable = true : this.showTable = false;
-    this.selectionAmount = this.dataLength;
     this.userFilters.push({ name: 'gender', options: this.genders, defaultValue: 'All' });
-    this.userFilters.push({ name: 'nationality', options: this.nationalities, defaultValue: 'All' });
+    this.userFilters.push({ name: 'nat', options: this.nationalities, defaultValue: 'All' });
     this.dataSourceFilters.filterPredicate = function (record, filter) {
       const map = new Map(JSON.parse(filter));
       let isMatch = false;
       for (const [key, value] of map) {
-        const k: any = key as keyof User;
+        const k = key as keyof User;
         isMatch = (value == "All") || (record[k] == value);
         if (!isMatch) return false;
       }
@@ -76,41 +73,60 @@ export class UsersComponent implements OnInit {
 
   getUsers(): void {
     this.isLoading = true;
-    this.usersService.getUsers().subscribe((users) => {
-      const res = users['results'];
-      // TODO: push User objects
-      const data: any = [];
-      for (let i = 0; i < res.length; i++) {
-        const user: User = {
-          id: res[i]['id'].value,
-          name: res[i]['name'].first + ' ' + res[i]['name'].last,
-          email: res[i]['email'],
-          gender: res[i]['gender'],
-          nationality: res[i]['nat'],
-          age: res[i]['dob'].age,
-          registered: res[i]['registered'].age,
-          phone: res[i]['phone']
-        };
-        data.push(user);
-      }
+    this.usersService.getUsers().pipe(
+      map((res) => {
+        const data = res['results'];
+        this.dataLength = res['info']['results'];
+        return Object.keys(data).map((k) => {
+          const user: User =
+          {
+            name: data[k]['name'],
+            id: data[k]['id'],
+            email: data[k]['email'],
+            location: data[k]['location'],
+            picture: data[k]['picture'],
+            gender: data[k]['gender'],
+            dob: data[k]['dob'],
+            registered: data[k]['registered'],
+            phone: data[k]['phone'],
+            nat: data[k]['nat']
+          };
+          return user;
+        })
+      })
+    ).subscribe(data => {
       this.dataSourceFilters.data = this.dataSource.data = data;
       this.isLoading = false;
       this.dataLength > 0 ? this.showTable = true : this.showTable = false;
-      this.openSnackBar(this.dataLength + ' users found', 'close');
-
+      this.selectionAmount = this.dataLength;
+      this.openSnackBar(this.dataLength + ' results found', 'success');
     }, (error) => {
       this.isLoading = false;
-      this.openSnackBar('An error occured, please try again', 'error');
-
+      this.openSnackBar('An error occurred', 'error');
     });
   }
 
   exportFile(exportType: string): void {
     const date = new Date().toJSON().slice(0, 10).toString();
     const fileName = 'users_' + date;
-    const data = this.selection.selected.length > 0 ? this.selection.selected : this.dataSource.data;
-    this.exportService.exportFile(data, fileName, exportType, this.displayedColumns);
-    this.openSnackBar(exportType + ' export complete', 'close');
+    const data: any[] = [];
+    let collection: any[] = [];
+    this.selection.selected.length > 0 ? collection = this.selection.selected : collection = this.dataSource.data;
+    collection.forEach((item) => {
+      const user = {
+        first_name: item.name.first,
+        last_name: item.name.last,
+        gender: item.gender,
+        dob: item.dob.date,
+        location: item.location.country,
+        registered: item.registered.date,
+        nat: item.nat,
+        phone: item.phone
+      }
+      data.push(user);
+    });
+    const msg = this.exportService.exportFile(data, fileName, exportType, this.exportColumns);
+    this.openSnackBar(msg, 'close');
   }
 
 
@@ -162,10 +178,8 @@ export class UsersComponent implements OnInit {
     }
   }
   viewUser(user: User): void {
-    // go to user detail page and fetch user details
-    console.log(user);
     localStorage.setItem('user', JSON.stringify(user));
-    this.router.navigate(['/user/' + user.id]);
+    this.router.navigate(['/user/' + user.id.value]);
   }
 
 }
