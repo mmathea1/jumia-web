@@ -32,7 +32,7 @@ export class UsersComponent implements OnInit {
   selection = new SelectionModel<User>(true, []);
   userFilters: UserFilter[] = [];
   filterDictionary = new Map<string, string>();
-  displayedColumns = ['select', 'name', 'email', 'gender', 'nationality', 'age', 'registered', 'phone', 'view_user'];
+  displayedColumns = ['select', 'name', 'email', 'gender', 'location', 'dob', 'registered', 'phone', 'view_user'];
   exportColumns = ['first_name', 'last_name', 'dob', 'email', 'location', 'gender', 'phone', 'nat', 'registered'];
   genders: string[] = ['All', 'male', 'female'];
   nationalities: string[] = ['All', 'AU', 'BR', 'CA', 'CH', 'DE', 'DK', 'ES', 'FI', 'FR', 'GB', 'IE', 'IN', 'IR', 'MX', 'NL', 'NO', 'NZ', 'RS', 'TR', 'UA', 'US'];
@@ -63,6 +63,28 @@ export class UsersComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item: any, property) => {
+      switch (property) {
+        case 'name': {
+          return item[property]['first'];
+        }
+        case 'registered': {
+          const newDate = new Date(item.registered.date);
+          return newDate;
+        }
+        case 'location': {
+          return item[property]['country'];
+        }
+        case 'dob': {
+          return item[property]['age'];
+        }
+        default: {
+          return item[property];
+        }
+
+      }
+
+    };
   }
 
   openSnackBar(message: string, action: string): void {
@@ -180,6 +202,11 @@ export class UsersComponent implements OnInit {
   viewUser(user: User): void {
     localStorage.setItem('user', JSON.stringify(user));
     this.router.navigate(['/user/' + user.id.value]);
+  }
+
+  selectToggle(user: any): void {
+    this.selection.toggle(user);
+    this.selectionAmount = this.selection.selected.length;
   }
 
 }
