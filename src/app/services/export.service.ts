@@ -4,8 +4,8 @@ import * as FileSaver from 'file-saver';
 
 const CSV_EXTENSION = '.csv';
 const XML_EXTENSION = '.xml';
-const CSV_TYPE = 'text/csv';
-const XML_TYPE = 'application/xml';
+const CSV_TYPE = 'text/csv;charset=utf-8';
+const XML_TYPE = 'application/xml;charset=utf-8';
 
 @Injectable({
   providedIn: 'root'
