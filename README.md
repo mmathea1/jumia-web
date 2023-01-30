@@ -1,7 +1,7 @@
 # Jumia-web
 
 ## Project Desciription
-This repo is an SPA that displays a list of users and their information
+This repository is an Angular app that displays a list of users and their information
 
 ## Project Requirements
 
@@ -17,16 +17,13 @@ This repo is an SPA that displays a list of users and their information
 - Node v16
 - Bootstap
 
-## How to use
-
-### Set-up
-
-### Running
-
-### Tests
-
 ### Docker
+docker run -dp 3000:3000 jumia-web
 
+### Incomplete
+- unit tests
+- responsiveness
+- formatting output in utf-8 format
 
 ## Support
-contact: @mmathea1
+contact: mmathea984@gmail.com
