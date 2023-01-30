@@ -76,31 +76,33 @@ export class UsersComponent implements OnInit {
 
   getUsers(): void {
     this.isLoading = true;
-    this.usersService.getUsers()
-      .pipe((map(users => {
-        const res = users['results'];
-        // TODO: push User objects
-        const data: any = [];
-        for (let i = 0; i < res.length; i++) {
-          const user: User = {
-            id: res[i]['id'].value,
-            name: res[i]['name'].first + ' ' + res[i]['name'].last,
-            email: res[i]['email'],
-            gender: res[i]['gender'],
-            nationality: res[i]['nat'],
-            age: res[i]['dob'].age,
-            registered: res[i]['registered'].age,
-            phone: res[i]['phone']
-          };
-          data.push(user);
-        }
-        this.dataSourceFilters.data = this.dataSource.data = data;
-        // TODO: check for status 200
-        this.isLoading = false;
-        this.dataLength > 0 ? this.showTable = true : this.showTable = false;
-        this.openSnackBar(this.dataLength + ' users found', 'close');
-      })))
-      .subscribe();
+    this.usersService.getUsers().subscribe((users) => {
+      const res = users['results'];
+      // TODO: push User objects
+      const data: any = [];
+      for (let i = 0; i < res.length; i++) {
+        const user: User = {
+          id: res[i]['id'].value,
+          name: res[i]['name'].first + ' ' + res[i]['name'].last,
+          email: res[i]['email'],
+          gender: res[i]['gender'],
+          nationality: res[i]['nat'],
+          age: res[i]['dob'].age,
+          registered: res[i]['registered'].age,
+          phone: res[i]['phone']
+        };
+        data.push(user);
+      }
+      this.dataSourceFilters.data = this.dataSource.data = data;
+      this.isLoading = false;
+      this.dataLength > 0 ? this.showTable = true : this.showTable = false;
+      this.openSnackBar(this.dataLength + ' users found', 'close');
+
+    }, (error) => {
+      this.isLoading = false;
+      this.openSnackBar('An error occured, please try again', 'error');
+
+    });
   }
 
   exportFile(exportType: string): void {
