@@ -17,8 +17,15 @@ This repository is an Angular app that displays a list of users and their inform
 - Node v16
 - Bootstap
 
+## How to run this project
+- git clone https://github.com/mmathea1/jumia-web.git 
+- cd jumia-web
+- npm install --save
+- ng serve
+
 ### Docker
 docker run -dp 3000:3000 jumia-web
+
 
 ### Incomplete
 - unit tests
